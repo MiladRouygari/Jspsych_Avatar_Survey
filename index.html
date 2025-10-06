@@ -62,12 +62,20 @@
 
   <script>
     //const jsPsych = initJsPsych();
-    jsPsych.init({
-      timeline: timeline,
+    // jsPsych.init({
+    //   timeline: timeline,
+    //   show_progress_bar: true,
+    //   on_finish: function () {
+    //     url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
+    //     jsPsychSheet.uploadData(url, jsPsych.data.get().csv())
+    //   }
+    // });
+    // the jsPsych instance
+    const jsPsych = initJsPsych({
       show_progress_bar: true,
       on_finish: function () {
-        url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
-        jsPsychSheet.uploadData(url, jsPsych.data.get().csv())
+        const url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
+        jsPsychSheet.uploadData(url, jsPsych.data.get().csv());
       }
     });
 
