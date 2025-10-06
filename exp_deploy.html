@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <title> Assessing National Affiliation from Appearances - TEST</title>
+
+    <!-- jsPsych core + CSS -->
+    <script src="https://unpkg.com/jspsych@8.2.2"></script>
+    <link href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css" rel="stylesheet" />
+
+    <!-- Plugins -->
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+
+
+    <!-- >
+    <!-- jsPsychSheet library -->
+    <script src="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.js"></script>
+    <link rel="stylesheet" href="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.css">
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--  // styles didn't work since I am using image-keyboard-response -->
+    <style>
+      /* make the trial a vertical stack so the prompt sits above the image */
+      .trial-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* instructions appear above the image with nice spacing */
+      .trial-wrap p {
+        order: 0;              /* above the image */
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .trial-wrap img {
+        order: 1;              /* below the prompt */
+        max-width: 80vw;
+        max-height: 70vh;
+        height: auto;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+      }
+
+        .above-prompt {
+          display: block;
+          margin-bottom: 10px;
+        }
+
+    </style>
+
+  </head>
+  <body></body>
+
+  <script>
+    //const jsPsych = initJsPsych();
+    jsPsych.init({
+      timeline: timeline,
+      show_progress_bar: true,
+      on_finish: function () {
+        url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
+        jsPsychSheet.uploadData(url, jsPsych.data.get().csv())
+      }
+    });
+
+    // ---- Welcome Page ----
+    var welcome = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+        <div style="max-width: 800px; margin: 100px auto; text-align: center;">
+          <h1>Welcome to the Study</h1>
+
+          <p>Thank you for participating in our research.</p>
+
+          <p> Welcome to this study. In this experiment, you will see a series of photographs of different individuals (avatars).
+          For each image, your task is to decide whether you think the person could hold a German passport or not.
+          Please indicate your response using the keyboard: press <strong>F</strong> for “Yes” and <strong>J</strong> for “No.”
+          (The question and response keys will remain the same throughout the entire experiment.) </p>
+
+          <p> After you make your response, the next image will appear automatically.
+          Before starting the main task, you will be asked to answer three brief personal questions.
+          Once these are completed, the main part of the study will begin.
+          </p>
+
+          <p> We acknowledge that a person’s cultural or national background cannot be determined from appearance alone.
+          However, for the purposes of this study, please base your judgments solely on your immediate visual impressions.
+          </p>
+
+          <p> To ensure reliable results, please follow these instructions:
+          <ul>
+          <li>Respond as quickly and instinctively as possible.</li>
+          <li>There are no right or wrong answers.</li>
+          <li>Base your judgments on your first impression.</li>
+          </ul>
+          </p>
+
+          <p> The entire study will take approximately 10 minutes to complete.
+          All responses will remain anonymous and will be used exclusively for research purposes. </p>
+          <p> When you are ready, please press the <strong>spacebar</strong> to begin. </p>
+        </div>
+    `,
+
+  choices: [' '],
+};
+
+
+    //  1 Personal information - Age
+    var age = {
+      type: jsPsychSurveyHtmlForm,
+      preamble: '<p>Please enter your age below:</p>',
+      html: `
+        <p>
+          <input
+            name="age"
+            type="text"
+            pattern="^[0-9]+$"
+            required
+            inputmode="numeric"
+            placeholder="Enter your age"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+            />
+        </p>
+        `,
+    };
+
+    // Personal information - Handness
+    var handness = {
+      type: jsPsychSurveyHtmlForm,
+      preamble: '<p>Which hand do you use most often?</p>',
+      html: `
+        <p>
+          <label><input type="radio" name="handedness" value="Right" required> Right</label><br>
+          <label><input type="radio" name="handedness" value="Left"> Left</label><br>
+          <label><input type="radio" name="handedness" value="Ambidextrous"> Ambidextrous</label>
+        </p>
+        `,
+    };
+
+    // Personal information - ationality
+    var country = {
+      type: jsPsychSurveyHtmlForm,
+      preamble: '<p>What is your nationality?</p>',
+      html: `
+        <p>
+          <input
+            name="country"
+            type="text"
+            required
+            placeholder="Enter your country"
+          />
+        </p>
+        `,
+    };
+
+    // Main Trial
+    //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
+    const imageCount = 3; // change this to however many images you have
+    const image_files = Array.from({ length: imageCount }, (_, i) => `img/${i + 1}.png`);
+
+    const shuffled_images = jsPsych.randomization.shuffle(image_files);
+
+    const trial = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: jsPsych.timelineVariable('image'), // This pulls the image path from the timeline variable
+      choices: ['F', 'J'], // Or your specific choices
+      prompt: `<p>Does this person look like someone who could hold a German passport?<br>
+      Press 'F' for Yes and 'J' for No.</p>`,  // <-- your styled text
+      stimulus_height: 400,
+      maintain_aspect_ratio: true,
+      choices: ['F', 'J'],
+      data: {
+        task: 'image_trial'
+      }
+    };
+
+    const timeline_variables = [];
+    for (let i = 0; i < shuffled_images.length; i++) {
+      timeline_variables.push({ image: shuffled_images[i] });
+    }
+
+    // Example with a block of trials
+    const random_image_block = {
+      timeline: [trial],
+      timeline_variables: timeline_variables,
+      randomize_order: false // Set to false if you want the shuffle to be outside the timeline
+    };
+
+
+
+    // ---- End Screen ----
+    const end = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+        <div style="max-width: 800px; margin: 100px auto; text-align: center;">
+          <h1>Thank you!</h1>
+          <p>You’ve reached the end of the experiment.</p>
+          <p><em>Press any key to recorded your responses.</em></p>
+        </div>
+      `,
+      choices: "ALL_KEYS",
+    };
+
+    // preloading the images
+    //var img_list = ['img/1.png','img/2.png','img/3.png' ]
+    var preload = {
+      type: jsPsychPreload,
+      images: shuffled_images
+    };
+
+
+    // ---- Build timeline ----
+    var timeline = [preload, welcome, age, handness, country, random_image_block, end];
+
+    // ---- Run experiment ---
+    jsPsych.run(timeline).then(() => {
+      jsPsych.data.get().localSave('csv','data.csv');
+});
+  </script>
+
+</html>
