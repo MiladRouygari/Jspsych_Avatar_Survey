@@ -15,7 +15,6 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.4"></script>
-    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
 
 
     <!-- >
@@ -89,9 +88,10 @@
     });
 
       
+
     const participant_id = jsPsych.randomization.randomID(10);
     jsPsych.data.addProperties({participant_id: participant_id});
-    const filename = `${subject_id}.csv`;
+    const filename = `${participant_id}.csv`;
 
     // ---- Welcome Page ----
     var welcome = {
@@ -166,7 +166,7 @@
         `,
     };
 
-    // Personal information - ationality
+    // Personal information - Nationality
     var country = {
       type: jsPsychSurveyHtmlForm,
       preamble: '<p>What is your nationality?</p>',
@@ -197,7 +197,6 @@
       Press 'F' for Yes and 'J' for No.</p>`,  // <-- your styled text
       stimulus_height: 400,
       maintain_aspect_ratio: true,
-      choices: ['F', 'J'],
       data: {
         task: 'image_trial'
       }
@@ -239,14 +238,14 @@
 
 
     // ---- Build timeline ----
-    var timeline = [preload, welcome, age, handness, country, random_image_block, end];
+    var timeline = [preload, welcome, age, handness, country, random_image_block, end, save_data];
 
     // OSF + Pipeline
     const save_data = {
       type: jsPsychPipe,
       action: "save",
       experiment_id: expID,
-      filename: `${participant_id}.csv`,
+      filename: filename,
       data_string: ()=>jsPsych.data.get().csv()
     };
     
@@ -262,8 +261,9 @@
 
     // ---- Run experiment ---
     jsPsych.run(timeline).then(() => {
-      jsPsych.data.get().localSave('csv','data.csv');
-      jsPsych.simulate([flanker_timeline, save_data]);
+      // uncomment if you want a local download too
+      //jsPsych.data.get().localSave('csv','data.csv');
+      
 });
   </script>
 
