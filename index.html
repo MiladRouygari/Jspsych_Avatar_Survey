@@ -236,10 +236,6 @@
       images: shuffled_images
     };
 
-
-    // ---- Build timeline ----
-    var timeline = [preload, welcome, age, handness, country, random_image_block, end, save_data];
-
     // OSF + Pipeline
     const save_data = {
       type: jsPsychPipe,
@@ -249,15 +245,20 @@
       data_string: ()=>jsPsych.data.get().csv()
     };
     
+    // ---- Build timeline ----
+    var timeline = [preload, welcome, age, handness, country, random_image_block, end, save_data];
+
+
+    
     // OSF + Pipeline
-    const finished = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: "Finished!",
-      choices: "NO_KEYS",
-      simulation_options: {
-        simulate: false
-      }
-    };
+    // const finished = {
+    //   type: jsPsychHtmlKeyboardResponse,
+    //   stimulus: "Finished!",
+    //   choices: "NO_KEYS",
+    //   simulation_options: {
+    //     simulate: false
+    //   }
+    // };
 
     // ---- Run experiment ---
     jsPsych.run(timeline).then(() => {
