@@ -14,6 +14,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.4"></script>
 
 
     <!-- >
@@ -75,6 +76,9 @@
     //   }
     // });
     // the jsPsych instance
+
+    // replace this with your experiment ID from pipe.jspsych.org
+    const expID = "AACa3FPLxrOU";
     const jsPsych = initJsPsych({
       show_progress_bar: true,
       on_finish: function () {
@@ -231,9 +235,29 @@
     // ---- Build timeline ----
     var timeline = [preload, welcome, age, handness, country, random_image_block, end];
 
+    // OSF + Pipeline
+    const save_data = {
+      type: jsPsychPipe,
+      action: "save",
+      experiment_id: expID,
+      filename: `${participant_id}.csv`,
+      data_string: ()=>jsPsych.data.get().csv()
+    };
+    
+    // OSF + Pipeline
+    const finished = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: "Finished!",
+      choices: "NO_KEYS",
+      simulation_options: {
+        simulate: false
+      }
+    };
+
     // ---- Run experiment ---
     jsPsych.run(timeline).then(() => {
       jsPsych.data.get().localSave('csv','data.csv');
+      jsPsych.simulate([flanker_timeline, save_data]);
 });
   </script>
 
