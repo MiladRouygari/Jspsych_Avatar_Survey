@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <title> Assessing National Affiliation from Appearances - TEST</title>
+    <title> Assessing National Affiliation from Appearances</title>
 
     <!-- jsPsych core + CSS -->
     <script src="https://unpkg.com/jspsych@8.2.2"></script>
@@ -18,49 +18,13 @@
 
 
     <!-- >
-    <!-- jsPsychSheet library -->
-    <!--  <script src="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.js"></script> -->
-    <!--  <link rel="stylesheet" href="https://brain2ai.github.io/jsPsychSheet/jspsychsheet.css"> -->
-    <script src="./jsPsychSheet/jspsychsheet.js"></script>
-    <link rel="stylesheet" href="./jsPsychSheet/jspsychsheet.css">
+    <!-- jsPsychSheet library, no longer needed -->  
+    <!-- <script src="./jsPsychSheet/jspsychsheet.js"></script> -->
+    <!-- <link rel="stylesheet" href="./jsPsychSheet/jspsychsheet.css"> -->
     
-    
-
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 
-    <!--  // styles didn't work since I am using image-keyboard-response -->
-    <style>
-      /* make the trial a vertical stack so the prompt sits above the image */
-      .trial-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      /* instructions appear above the image with nice spacing */
-      .trial-wrap p {
-        order: 0;              /* above the image */
-        margin-bottom: 16px;
-        text-align: center;
-      }
-
-      .trial-wrap img {
-        order: 1;              /* below the prompt */
-        max-width: 80vw;
-        max-height: 70vh;
-        height: auto;
-        width: auto;
-        display: block;
-        margin: 0 auto;
-      }
-
-        .above-prompt {
-          display: block;
-          margin-bottom: 10px;
-        }
-
-    </style>
 
   </head>
   <body></body>
@@ -77,17 +41,16 @@
     // });
     // the jsPsych instance
 
-    // replace this with your experiment ID from pipe.jspsych.org
+    // experiment ID from pipe.jspsych.org
     const expID = "AACa3FPLxrOU";
     const jsPsych = initJsPsych({
-      show_progress_bar: true,
-      on_finish: function () {
-        const url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
-        jsPsychSheet.uploadData(url, jsPsych.data.get().csv());
+      //show_progress_bar: true,
+      // on_finish: function () {
+      //   const url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
+      //   jsPsychSheet.uploadData(url, jsPsych.data.get().csv());
       }
     });
 
-      
 
     const participant_id = jsPsych.randomization.randomID(10);
     jsPsych.data.addProperties({participant_id: participant_id});
@@ -229,8 +192,7 @@
       choices: "ALL_KEYS",
     };
 
-    // preloading the images
-    //var img_list = ['img/1.png','img/2.png','img/3.png' ]
+
     var preload = {
       type: jsPsychPreload,
       images: shuffled_images
