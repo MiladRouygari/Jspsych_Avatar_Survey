@@ -25,7 +25,7 @@
     const expID = "AACa3FPLxrOU";
     const jsPsych = initJsPsych({});
 
-    // Randomly generated Participant id 
+    // Randomly generated Participant id
     const participant_id = jsPsych.randomization.randomID(10);
     jsPsych.data.addProperties({participant_id: participant_id});
     const filename = `${participant_id}.csv`;
@@ -119,20 +119,20 @@
         `,
     };
 
-    
+
     //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
-    const imageCount = 3; // change this to however many images you have
+    const imageCount = 98; // change this to however many images you have
     const image_files = Array.from({ length: imageCount }, (_, i) => `img/${i + 1}.png`);
 
     const shuffled_images = jsPsych.randomization.shuffle(image_files);
-    
+
     // Main Trial
     const trial = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('image'), // pulls the image path from the timeline variable
       choices: ['F', 'J'], // Or your specific choices
       prompt: `<p>Does this person look like someone who could hold a German passport?<br>
-      Press 'F' for Yes and 'J' for No.</p>`, 
+      Press 'F' for Yes and 'J' for No.</p>`,
       stimulus_height: 400,
       maintain_aspect_ratio: true,
       data: {
@@ -181,7 +181,7 @@
       filename: filename,
       data_string: ()=>jsPsych.data.get().csv()
     };
-    
+
     // ---- Build timeline ----
     var timeline = [preload, welcome, age, handness, country, random_image_block, end, save_data];
 
@@ -190,7 +190,7 @@
     jsPsych.run(timeline).then(() => {
       // uncomment if you want a local download too
       //jsPsych.data.get().localSave('csv','data.csv');
-      
+
 });
   </script>
 
