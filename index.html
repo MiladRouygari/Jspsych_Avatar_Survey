@@ -135,9 +135,8 @@
       Press 'F' for Yes and 'J' for No.</p>`,
       stimulus_height: 400,
       maintain_aspect_ratio: true,
-      data: {
-        task: 'image_trial'
-      }
+      data: {task: 'image_trial'},
+      post_trial_gap: 400 // 400 ms pause before the next image
     };
 
     const timeline_variables = [];
