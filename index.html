@@ -16,42 +16,16 @@
     <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.4"></script>
 
-
-    <!-- >
-    <!-- jsPsychSheet library, no longer needed -->  
-    <!-- <script src="./jsPsychSheet/jspsychsheet.js"></script> -->
-    <!-- <link rel="stylesheet" href="./jsPsychSheet/jspsychsheet.css"> -->
-    
-    <!-- jQuery -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-
-
   </head>
   <body></body>
 
   <script>
-    //const jsPsych = initJsPsych();
-    // jsPsych.init({
-    //   timeline: timeline,
-    //   show_progress_bar: true,
-    //   on_finish: function () {
-    //     url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
-    //     jsPsychSheet.uploadData(url, jsPsych.data.get().csv())
-    //   }
-    // });
-    // the jsPsych instance
 
     // experiment ID from pipe.jspsych.org
     const expID = "AACa3FPLxrOU";
-    const jsPsych = initJsPsych({
-      //show_progress_bar: true,
-      // on_finish: function () {
-      //   const url = "https://script.google.com/macros/s/AKfycbyY3YxORC-34uAm4nqGsvpElIKq0TWRIYAS55dTg_AjdCZPv4L_un5cyYO3-yZgnwGg0A/exec";
-      //   jsPsychSheet.uploadData(url, jsPsych.data.get().csv());
-      // }
-    });
+    const jsPsych = initJsPsych({});
 
-
+    // Randomly generated Participant id 
     const participant_id = jsPsych.randomization.randomID(10);
     jsPsych.data.addProperties({participant_id: participant_id});
     const filename = `${participant_id}.csv`;
@@ -116,7 +90,7 @@
         `,
     };
 
-    // Personal information - Handness
+    // 2 Personal information - Handness
     var handness = {
       type: jsPsychSurveyHtmlForm,
       preamble: '<p>Which hand do you use most often?</p>',
@@ -129,7 +103,7 @@
         `,
     };
 
-    // Personal information - Nationality
+    // 3 Personal information - Nationality
     var country = {
       type: jsPsychSurveyHtmlForm,
       preamble: '<p>What is your nationality?</p>',
@@ -145,19 +119,20 @@
         `,
     };
 
-    // Main Trial
+    
     //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
     const imageCount = 3; // change this to however many images you have
     const image_files = Array.from({ length: imageCount }, (_, i) => `img/${i + 1}.png`);
 
     const shuffled_images = jsPsych.randomization.shuffle(image_files);
-
+    
+    // Main Trial
     const trial = {
       type: jsPsychImageKeyboardResponse,
-      stimulus: jsPsych.timelineVariable('image'), // This pulls the image path from the timeline variable
+      stimulus: jsPsych.timelineVariable('image'), // pulls the image path from the timeline variable
       choices: ['F', 'J'], // Or your specific choices
       prompt: `<p>Does this person look like someone who could hold a German passport?<br>
-      Press 'F' for Yes and 'J' for No.</p>`,  // <-- your styled text
+      Press 'F' for Yes and 'J' for No.</p>`, 
       stimulus_height: 400,
       maintain_aspect_ratio: true,
       data: {
@@ -210,17 +185,6 @@
     // ---- Build timeline ----
     var timeline = [preload, welcome, age, handness, country, random_image_block, end, save_data];
 
-
-    
-    // OSF + Pipeline
-    // const finished = {
-    //   type: jsPsychHtmlKeyboardResponse,
-    //   stimulus: "Finished!",
-    //   choices: "NO_KEYS",
-    //   simulation_options: {
-    //     simulate: false
-    //   }
-    // };
 
     // ---- Run experiment ---
     jsPsych.run(timeline).then(() => {
