@@ -70,6 +70,38 @@
   choices: [' '],
 };
 
+// ---- Welcome Page ----
+var screen_before_main = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div style="max-width: 800px; margin: 100px auto; text-align: center;">
+      <h1></h1>
+
+      <p>main trial begins</p>
+
+      <p>repeat some stuff from the welcome </p>
+    </div>
+`,
+
+choices: [' '],
+};
+
+// ---- Personal info Page ----
+var personal_info = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div style="max-width: 800px; margin: 100px auto; text-align: center;">
+      <h1></h1>
+
+      <p>please answer the following personal questions</p>
+
+
+    </div>
+`,
+
+choices: [' '],
+};
+
 
     //  1 Personal information - Age
     var age = {
@@ -119,6 +151,43 @@
         `,
     };
 
+    // 4 Personal information - Gender
+    var gender = {
+      type: jsPsychSurveyHtmlForm,
+      preamble: '<p>Which of the following best describes your gender?</p>',
+      html: `
+        <p>
+          <label><input type="radio" name="handedness" value="Female" required> Female</label><br>
+          <label><input type="radio" name="handedness" value="Male"> Male</label><br>
+          <label><input type="radio" name="handedness" value="Diverse"> Diverse</label>
+        </p>
+        `,
+    };
+
+
+    // Example Trial
+    const example_trial = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: 'img/example.png',
+      choices: ['F', 'J'], // Or your specific choices
+      prompt: `
+        <div style="font-size:16px; line-height:1.4;">
+          <p>Does this person look like someone who could hold a German passport?</p>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <div style="text-align:left;">
+              <span><strong>F = Yes</strong></span>
+            </div>
+            <div style="text-align:right;">
+              <span><strong>J = No</strong> </span>
+            </div>
+          </div>
+        </div>
+  `,
+      stimulus_height: 400,
+      maintain_aspect_ratio: true,
+      data: {task: 'image_trial'},
+      post_trial_gap: 400 // 400 ms pause before the next image
+    };
 
     //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
     const imageCount = 98; // change this to however many images you have
@@ -126,13 +195,26 @@
 
     const shuffled_images = jsPsych.randomization.shuffle(image_files);
 
+
+
     // Main Trial
     const trial = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('image'), // pulls the image path from the timeline variable
       choices: ['F', 'J'], // Or your specific choices
-      prompt: `<p>Does this person look like someone who could hold a German passport?<br>
-      Press 'F' for Yes and 'J' for No.</p>`,
+      prompt: `
+        <div style="font-size:16px; line-height:1.4;">
+          <p>Does this person look like someone who could hold a German passport?</p>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <div style="text-align:left;">
+              <span><strong>F = Yes</strong></span>
+            </div>
+            <div style="text-align:right;">
+              <span><strong>J = No</strong> </span>
+            </div>
+          </div>
+        </div>
+  `,
       stimulus_height: 400,
       maintain_aspect_ratio: true,
       data: {task: 'image_trial'},
@@ -182,7 +264,8 @@
     };
 
     // ---- Build timeline ----
-    var timeline = [preload, welcome, age, handness, country, random_image_block, end, save_data];
+    var timeline = [preload, welcome, example_trial, screen_before_main,
+      random_image_block, personal_info, age, gender, handness, country, end, save_data];
 
 
     // ---- Run experiment ---
