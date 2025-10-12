@@ -15,6 +15,76 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+
+
+    <style>
+      .recap-wrap{
+        max-width: 720px;
+        margin: 0 auto;
+        text-align: left;
+        line-height: 1.45;
+      }
+      .recap-wrap h2{
+        text-align:center;
+        margin: 0 0 12px 0;
+        font-size: 28px;
+      }
+      .recap-list{
+        list-style: none;
+        padding: 0;
+        margin: 0 0 14px 0;
+      }
+      .recap-list li{
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        align-items: start;
+        column-gap: 10px;
+        margin: 8px 0;
+      }
+      .recap-list li::before{
+        content: "";
+        width: 8px;
+        height: 8px;
+        margin-top: 8px;
+        border-radius: 999px;
+        background: currentColor;
+        opacity: 0.7;
+        display: inline-block;
+      }
+      .recap-wrap p{
+        margin: 0;
+        text-align: center;
+      }
+      /* Pretty keyboard keys */
+      kbd{
+        border: 1px solid #cfcfcf;
+        border-bottom-width: 2px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-weight: 700;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        background: #f7f7f7;
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+      }
+
+        /* bullets close to text */
+        .bullets-tight{
+          list-style-position: inside; /* bullet sits inside the text box */
+          padding-left: 0;             /* remove default indent */
+          margin-left: 0;
+          margin-right: 0;
+        }
+
+        /* optional: center the whole list but keep lines left-aligned */
+        .bullets-tight{
+          width: max-content;
+          margin: 0 auto;      /* centers the UL */
+          text-align: left;    /* keeps text left-aligned */
+        }
+
+
+    </style>
 
   </head>
   <body></body>
@@ -40,28 +110,31 @@
           <p>Thank you for participating in our research.</p>
 
           <p>In this experiment, you will see a series of photographs of different individuals (avatars).
-          For each image, your task is to decide whether you think the person could hold a German passport or not.
-          Please indicate your response using the keyboard: press <strong>F</strong> for “Yes” and <strong>J</strong> for “No.”
-          (The question and response keys will remain the same throughout the entire experiment.) </p>
+          For each image, your task is to decide whether you think the person could <b><i>hold a German passport or not</b></i>.
+          Please indicate your response using the keyboard:
+            <div>
+              <kbd>F</kbd> = Yes, <kbd>J</kbd> = No
+            </div></p>
+          <p><b>The question and response keys</b> will remain the <b>same</b> throughout the entire experiment. </p>
 
-          <p> After you make your response, the next image will appear automatically.
-          Before starting the main task, you will be asked to answer three brief personal questions.
-          Once these are completed, the main part of the study will begin.
-          </p>
+          <p>After you submit your response, the next image will appear automatically.
+          Before the main task, you will see an example image;
+          the main trials will then begin.
+          Once you finish the main trials, you will answer a few brief personal questions.</p>
 
           <p> We acknowledge that a person’s cultural or national background cannot be determined from appearance alone.
           However, for the purposes of this study, please base your judgments solely on your immediate visual impressions.
           </p>
 
           <p> To ensure reliable results, please follow these instructions:
-          <ul>
+          <ul class="bullets-tight">
           <li>Respond as quickly and instinctively as possible.</li>
           <li>There are no right or wrong answers.</li>
           <li>Base your judgments on your first impression.</li>
           </ul>
           </p>
 
-          <p> The entire study will take approximately 8 minutes to complete.
+          <p> The entire study will take approximately 5 minutes to complete.
           All responses will remain anonymous and will be used exclusively for research purposes. </p>
           <p> When you are ready, please press the <strong>spacebar</strong> to begin. </p>
         </div>
@@ -70,18 +143,37 @@
   choices: [' '],
 };
 
-// ---- Welcome Page ----
+
+// ---- Screen for the main trial Page ----
 var screen_before_main = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `
-    <div style="max-width: 800px; margin: 100px auto; text-align: center;">
-      <h1></h1>
+  <div class="recap-wrap">
+    <h2>Quick recap about the study</h2>
 
-      <p>main trial begins</p>
+    <ul class="recap-list">
+      <li>
+        <div>The question stays the same throughout:
+          <em>“Could this person hold a German passport?”</em>
+        </div>
+      </li>
+      <li>
+        <div>Use the keys:
+          <kbd>F</kbd> = Yes, <kbd>J</kbd> = No
+        </div>
+      </li>
+      <li>
+        <div>Respond quickly, based on your first impression.</div>
+      </li>
+      <li>
+        <div>The next image appears automatically after your response.</div>
+      </li>
+    </ul>
 
-      <p>repeat some stuff from the welcome </p>
-    </div>
-`,
+    <p>The main trials are about to begin. When you’re ready, press the <strong>spacebar</strong> to start.</p>
+  </div>
+  `,
+
 
 choices: [' '],
 };
@@ -91,10 +183,14 @@ var personal_info = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `
     <div style="max-width: 800px; margin: 100px auto; text-align: center;">
-      <h1></h1>
+    <h1>Personal Information</h1>
 
-      <p>please answer the following personal questions</p>
+    <p>The main experiment is now complete. Before we finish, we still need to collect some personal information.
+    In the next section, you will be asked 4 brief personal/demographic questions needed for this study.</p>
 
+    <p>All items are required.</p>
+
+    <p>When you are ready, please press the <strong>spacebar</strong> to proceed.</p>
 
     </div>
 `,
@@ -174,10 +270,10 @@ choices: [' '],
         <div style="font-size:16px; line-height:1.4;">
           <p>Does this person look like someone who could hold a German passport?</p>
           <div style="display:flex; justify-content:space-between; margin-top:8px;">
-            <div style="text-align:left;">
+            <div style="text-align:left; font-size:1.4em;">
               <span><strong>F = Yes</strong></span>
             </div>
-            <div style="text-align:right;">
+            <div style="text-align:right; font-size:1.4em;">
               <span><strong>J = No</strong> </span>
             </div>
           </div>
@@ -186,11 +282,11 @@ choices: [' '],
       stimulus_height: 400,
       maintain_aspect_ratio: true,
       data: {task: 'image_trial'},
-      post_trial_gap: 400 // 400 ms pause before the next image
+      post_trial_gap: 200 // 400 ms pause before the next image
     };
 
     //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
-    const imageCount = 98; // change this to however many images you have
+    const imageCount = 3; // change this to however many images you have
     const image_files = Array.from({ length: imageCount }, (_, i) => `img/${i + 1}.png`);
 
     const shuffled_images = jsPsych.randomization.shuffle(image_files);
@@ -206,10 +302,10 @@ choices: [' '],
         <div style="font-size:16px; line-height:1.4;">
           <p>Does this person look like someone who could hold a German passport?</p>
           <div style="display:flex; justify-content:space-between; margin-top:8px;">
-            <div style="text-align:left;">
+            <div style="text-align:left; font-size:1.4em;">
               <span><strong>F = Yes</strong></span>
             </div>
-            <div style="text-align:right;">
+            <div style="text-align:right; font-size:1.4em;">
               <span><strong>J = No</strong> </span>
             </div>
           </div>
@@ -243,6 +339,8 @@ choices: [' '],
           <h1>Thank you!</h1>
           <p>You’ve reached the end of the experiment.</p>
           <p><em>Press any key to record your responses, and please wait while we save your results.</em></p>
+          <p>An indicator will appear. When the indicator disappears, your data have been saved and you are free to close this tab.</p>
+
         </div>
       `,
       choices: "ALL_KEYS",
