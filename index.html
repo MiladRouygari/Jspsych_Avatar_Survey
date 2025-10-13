@@ -178,6 +178,22 @@ var screen_before_main = {
 choices: [' '],
 };
 
+
+const commentTrial = {
+  type: jsPsychSurveyText,
+  questions: [
+    {
+      prompt: '<h3>Open feedback (optional)</h3> <p>Please share any suggestions, uncertainties, or additional comments. Or Continue with no comment.</p>',
+      name: 'comments',
+      placeholder: 'Type here…',
+      rows: 10,        // height
+      columns: 100,    // width (approximate, in characters)
+      required: false
+    }
+  ],
+};
+
+
 // ---- Personal info Page ----
 var personal_info = {
   type: jsPsychHtmlKeyboardResponse,
@@ -363,7 +379,7 @@ choices: [' '],
 
     // ---- Build timeline ----
     var timeline = [preload, welcome, example_trial, screen_before_main,
-      random_image_block, personal_info, age, gender, handness, country, end, save_data];
+      random_image_block, personal_info, age, gender, handness, country, commentTrial, end, save_data];
 
 
     // ---- Run experiment ---
