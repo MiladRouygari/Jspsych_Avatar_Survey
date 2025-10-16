@@ -113,7 +113,7 @@
           For each image, your task is to decide whether you think the person could <b><i>hold a German passport or not</b></i>.
           Please indicate your response using the keyboard:
             <div>
-              <kbd>S</kbd> = Yes, <kbd>L</kbd> = No
+              <kbd>Q</kbd> = Yes, <kbd>P</kbd> = No
             </div></p>
           <p><b>The question and response keys</b> will remain the <b>same</b> throughout the entire experiment. </p>
 
@@ -159,7 +159,7 @@ var screen_before_main = {
       </li>
       <li>
         <div>Use the keys:
-          <kbd>S</kbd> = Yes, <kbd>L</kbd> = No
+          <kbd>Q</kbd> = Yes, <kbd>P</kbd> = No
         </div>
       </li>
       <li>
@@ -281,16 +281,16 @@ choices: [' '],
     const example_trial = {
       type: jsPsychImageKeyboardResponse,
       stimulus: 'img/example.png',
-      choices: ['S', 'L'], // Or your specific choices
+      choices: ['Q', 'P'], // Or your specific choices
       prompt: `
         <div style="font-size:16px; line-height:1.4;">
           <p>Does this person look like someone who could hold a German passport?</p>
           <div style="display:flex; justify-content:space-between; margin-top:8px;">
             <div style="text-align:left; font-size:1.4em;">
-              <span><strong>S = Yes</strong></span>
+              <span><strong>Q = Yes</strong></span>
             </div>
             <div style="text-align:right; font-size:1.4em;">
-              <span><strong>L = No</strong> </span>
+              <span><strong>P = No</strong> </span>
             </div>
           </div>
         </div>
@@ -313,16 +313,16 @@ choices: [' '],
     const trial = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('image'), // pulls the image path from the timeline variable
-      choices: ['S', 'L'], // Or your specific choices
+      choices: ['Q', 'P'], // Or your specific choices
       prompt: `
         <div style="font-size:16px; line-height:1.4;">
           <p>Does this person look like someone who could hold a German passport?</p>
           <div style="display:flex; justify-content:space-between; margin-top:8px;">
             <div style="text-align:left; font-size:1.4em;">
-              <span><strong>S = Yes</strong></span>
+              <span><strong>Q = Yes</strong></span>
             </div>
             <div style="text-align:right; font-size:1.4em;">
-              <span><strong>L = No</strong> </span>
+              <span><strong>P = No</strong> </span>
             </div>
           </div>
         </div>
