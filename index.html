@@ -97,10 +97,26 @@
 
     // Randomly generated Participant id
     const participant_id = jsPsych.randomization.randomID(10);
-    jsPsych.data.addProperties({participant_id: participant_id});
+
+    // 50/50 using Math.random()
+    const condition = Math.random() < 0.5 ? 1 : 2;
+    // mapping from your condition
+    const isYesLeft = condition === 1;
+    //const KEY_YES = isYesLeft ? 'arrowleft' : 'arrowright';
+    //const KEY_NO  = isYesLeft ? 'arrowright' : 'arrowleft';
+
+    jsPsych.data.addProperties({participant_id: participant_id, condition: condition});
+
     const filename = `${participant_id}.csv`;
 
     // ---- Welcome Page ----
+    // To be used in the welcome page
+    const arrowRow = `
+      <div>
+        <kbd title="Left Arrow" aria-label="Left Arrow">&larr;</kbd> ${isYesLeft ? 'Yes' : 'No'}, &nbsp;&nbsp;
+        <kbd title="Right Arrow" aria-label="Right Arrow">&rarr;</kbd> ${isYesLeft ? 'No' : 'Yes'}
+      </div>
+    `;
     var welcome = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `
@@ -109,12 +125,12 @@
 
           <p>Thank you for participating in our research.</p>
 
-          <p>In this experiment, you will see a series of photographs of different individuals (avatars).
-          For each image, your task is to decide whether you think the person could <b><i>hold a German passport or not</b></i>.
+          <p>In this experiment, you will see a series of photographs of different individuals (avatars).<br>
+          For each image, your task is to decide whether you think the person could <br><b><i>hold a German passport or not</b></i>.
           Please indicate your response using the keyboard:
-            <div>
-              <kbd>Q</kbd> = Yes, <kbd>P</kbd> = No
-            </div></p>
+            ${arrowRow} </p>
+
+            <p> Use a symmetrical, two-handed response: <br> press the <b>left arrow</b> with your <b>left</b> hand and the <b>right arrow</b> with your <b>right</b> hand.</p>
           <p><b>The question and response keys</b> will remain the <b>same</b> throughout the entire experiment. </p>
 
           <p>After you submit your response, the <b>next image</b> will appear <b> automatically</b>.
@@ -150,18 +166,16 @@ var screen_before_main = {
   stimulus: `
   <div class="recap-wrap">
     <h2>Quick recap about the study</h2>
+    <br>
 
     <ul class="recap-list">
       <li>
-        <div>The question stays the same throughout:
-          <em>“Could this person hold a German passport?”</em>
+        <div>The question and response keys stays the same throughout:<br>
+          <em> &nbsp;&nbsp; “Could this person hold a German passport?”</em>
+           ${arrowRow}
         </div>
       </li>
-      <li>
-        <div>Use the keys:
-          <kbd>Q</kbd> = Yes, <kbd>P</kbd> = No
-        </div>
-      </li>
+
       <li>
         <div>Respond quickly, based on your first impression.</div>
       </li>
@@ -169,8 +183,8 @@ var screen_before_main = {
         <div>The next image appears automatically after your response.</div>
       </li>
     </ul>
-
-    <p>The main trials are about to begin. When you’re ready, press the <strong>spacebar</strong> to start.</p>
+    <br>
+    <p> The main trials are about to begin. When you’re ready, press the <strong>spacebar</strong> to start.</p>
   </div>
   `,
 
@@ -178,20 +192,6 @@ var screen_before_main = {
 choices: [' '],
 };
 
-
-const commentTrial = {
-  type: jsPsychSurveyText,
-  questions: [
-    {
-      prompt: '<h3>Open feedback (optional)</h3> <p>Please share any suggestions, uncertainties, or additional comments. Or Continue with no comment.</p>',
-      name: 'comments',
-      placeholder: 'Type here…',
-      rows: 10,        // height
-      columns: 100,    // width (approximate, in characters)
-      required: false
-    }
-  ],
-};
 
 
 // ---- Personal info Page ----
@@ -202,7 +202,7 @@ var personal_info = {
     <h1>Personal Information</h1>
 
     <p>The main experiment is now complete. Before we finish, we still need to collect some personal information.
-    In the next section, you will be asked 4 brief personal/demographic questions needed for this study.</p>
+    In the next section, you will be asked four brief personal/demographic questions needed for this study.</p>
 
     <p>All items are required.</p>
 
@@ -276,21 +276,58 @@ choices: [' '],
         `,
     };
 
+    // 5 Personal information - Comment
+    const commentTrial = {
+      type: jsPsychSurveyText,
+      questions: [
+        {
+          prompt: '<h3>Open feedback (optional)</h3> <p>Please share any suggestions, uncertainties, or additional comments. Or Continue with no comment.</p>',
+          name: 'comments',
+          placeholder: 'Type here…',
+          rows: 10,        // height
+          columns: 100,    // width (approximate, in characters)
+          required: false
+        }
+      ],
+    };
 
     // Example Trial
-    const example_trial = {
+    const example_trial_1 = {
       type: jsPsychImageKeyboardResponse,
       stimulus: 'img/example.png',
-      choices: ['Q', 'P'], // Or your specific choices
+      choices: ['arrowleft', 'arrowright'],
       prompt: `
         <div style="font-size:16px; line-height:1.4;">
           <p>Does this person look like someone who could hold a German passport?</p>
           <div style="display:flex; justify-content:space-between; margin-top:8px;">
             <div style="text-align:left; font-size:1.4em;">
-              <span><strong>Q = Yes</strong></span>
+              <kbd title="Left Arrow" aria-label="Left Arrow">&larr;</kbd> Yes
             </div>
             <div style="text-align:right; font-size:1.4em;">
-              <span><strong>P = No</strong> </span>
+              <kbd title="Right Arrow" aria-label="Right Arrow">&rarr;</kbd> No
+            </div>
+          </div>
+        </div>
+  `,
+      stimulus_height: 400,
+      maintain_aspect_ratio: true,
+      data: {task: 'image_trial'},
+      post_trial_gap: 200 // 400 ms pause before the next image
+    };
+
+    const example_trial_2 = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: 'img/example.png',
+      choices: ['arrowright', 'arrowleft'],
+      prompt: `
+        <div style="font-size:16px; line-height:1.4;">
+          <p>Does this person look like someone who could hold a German passport?</p>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <div style="text-align:left; font-size:1.4em;">
+              <kbd title="Left Arrow" aria-label="Left Arrow">&larr;</kbd> No
+            </div>
+            <div style="text-align:right; font-size:1.4em;">
+              <kbd title="Right Arrow" aria-label="Right Arrow">&rarr;</kbd> Yes
             </div>
           </div>
         </div>
@@ -302,27 +339,25 @@ choices: [' '],
     };
 
     //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
-    const imageCount = 3; // change this to however many images you have
+    const imageCount = 5; // change this to however many images you have
     const image_files = Array.from({ length: imageCount }, (_, i) => `img/${i + 1}.png`);
 
     const shuffled_images = jsPsych.randomization.shuffle(image_files);
 
-
-
     // Main Trial
-    const trial = {
+    const trial_1 = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('image'), // pulls the image path from the timeline variable
-      choices: ['Q', 'P'], // Or your specific choices
+      choices: ['arrowleft', 'arrowright'],
       prompt: `
         <div style="font-size:16px; line-height:1.4;">
           <p>Does this person look like someone who could hold a German passport?</p>
           <div style="display:flex; justify-content:space-between; margin-top:8px;">
             <div style="text-align:left; font-size:1.4em;">
-              <span><strong>Q = Yes</strong></span>
+              <kbd title="Left Arrow" aria-label="Left Arrow">&larr;</kbd> Yes
             </div>
             <div style="text-align:right; font-size:1.4em;">
-              <span><strong>P = No</strong> </span>
+              <kbd title="Right Arrow" aria-label="Right Arrow">&rarr;</kbd> No
             </div>
           </div>
         </div>
@@ -339,12 +374,40 @@ choices: [' '],
     }
 
     // Example with a block of trials
-    const random_image_block = {
-      timeline: [trial],
+    const random_image_block_1 = {
+      timeline: [trial_1],
       timeline_variables: timeline_variables,
       randomize_order: false // Set to false if you want the shuffle to be outside the timeline
     };
 
+    const trial_2 = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: jsPsych.timelineVariable('image'), // pulls the image path from the timeline variable
+      choices: ['arrowleft', 'arrowright'],
+      prompt: `
+        <div style="font-size:16px; line-height:1.4;">
+          <p>Does this person look like someone who could hold a German passport?</p>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <div style="text-align:left; font-size:1.4em;">
+              <kbd title="Left Arrow" aria-label="Left Arrow">&larr;</kbd> No
+            </div>
+            <div style="text-align:right; font-size:1.4em;">
+              <kbd title="Right Arrow" aria-label="Right Arrow">&rarr;</kbd> Yes
+            </div>
+          </div>
+        </div>
+  `,
+      stimulus_height: 400,
+      maintain_aspect_ratio: true,
+      data: {task: 'image_trial'},
+      post_trial_gap: 400 // 400 ms pause before the next image
+    };
+    // Example with a block of trials
+    const random_image_block_2 = {
+      timeline: [trial_2],
+      timeline_variables: timeline_variables,
+      randomize_order: false // Set to false if you want the shuffle to be outside the timeline
+    };
 
 
     // ---- End Screen ----
@@ -377,15 +440,49 @@ choices: [' '],
       data_string: ()=>jsPsych.data.get().csv()
     };
 
+    const variants = {
+      1: {
+        example: example_trial_1,
+        random:  random_image_block_1
+      },
+      2: {
+        example: example_trial_2,
+        random:  random_image_block_2
+      }
+    };
+
+    // --- Build timeline using the chosen variants ---
+    const v = variants[condition];
+
+    const timeline = [
+      preload,
+      welcome,
+      v.example,
+      screen_before_main,
+      v.random,
+      personal_info,
+      age,
+      gender,
+      handness,
+      country,
+      commentTrial,
+      end,
+      save_data
+    ];
+
+
+
+
+
     // ---- Build timeline ----
-    var timeline = [preload, welcome, example_trial, screen_before_main,
-      random_image_block, personal_info, age, gender, handness, country, commentTrial, end, save_data];
+    // var timeline = [preload, welcome, example_trial, screen_before_main,
+    //   random_image_block, personal_info, age, gender, handness, country, commentTrial, end, save_data];
 
 
     // ---- Run experiment ---
     jsPsych.run(timeline).then(() => {
       // uncomment if you want a local download too
-      //jsPsych.data.get().localSave('csv','data.csv');
+      jsPsych.data.get().localSave('csv','data.csv');
 
 });
   </script>
