@@ -76,7 +76,7 @@
           margin-right: 0;
         }
 
-        /* optional: center the whole list but keep lines left-aligned */
+        /* center the whole list but keep lines left-aligned */
         .bullets-tight{
           width: max-content;
           margin: 0 auto;      /* centers the UL */
@@ -98,14 +98,12 @@
     // Randomly generated Participant id
     const participant_id = jsPsych.randomization.randomID(10);
 
-    // 50/50 using Math.random()
+    // about 50/50 probabilty of getting 1 or 2
     const condition = Math.random() < 0.5 ? 1 : 2;
 
     // mapping from your condition
-    // condition=1: Left Yes condition=2: Left No
+    // condition=1:isYesLeft=true --- check arrowRow --- Left Yes  --- condition=2: Left No
     const isYesLeft = condition === 1;
-    //const KEY_YES = isYesLeft ? 'arrowleft' : 'arrowright';
-    //const KEY_NO  = isYesLeft ? 'arrowright' : 'arrowleft';
 
     jsPsych.data.addProperties({participant_id: participant_id, condition: condition});
 
@@ -242,9 +240,9 @@ choices: [' '],
       preamble: '<p>Which hand do you use most often?</p>',
       html: `
         <p>
-          <label><input type="radio" name="handedness" value="Right" required> Right</label><br>
-          <label><input type="radio" name="handedness" value="Left"> Left</label><br>
-          <label><input type="radio" name="handedness" value="Ambidextrous"> Ambidextrous</label>
+          <label><input type="radio" name="handness" value="Right" required> Right</label><br>
+          <label><input type="radio" name="handness" value="Left"> Left</label><br>
+          <label><input type="radio" name="handness" value="Ambidextrous"> Ambidextrous</label>
         </p>
         `,
     };
@@ -341,7 +339,7 @@ choices: [' '],
     };
 
     //const image_files = ['img/1.png', 'img/2.png', 'img/3.png'];
-    const imageCount = 5; // change this to however many images you have
+    const imageCount = 3; // change this to however many images you have
     const image_files = Array.from({ length: imageCount }, (_, i) => `img/${i + 1}.png`);
 
     const shuffled_images = jsPsych.randomization.shuffle(image_files);
