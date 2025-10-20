@@ -100,7 +100,9 @@
 
     // 50/50 using Math.random()
     const condition = Math.random() < 0.5 ? 1 : 2;
+
     // mapping from your condition
+    // condition=1: Left Yes condition=2: Left No
     const isYesLeft = condition === 1;
     //const KEY_YES = isYesLeft ? 'arrowleft' : 'arrowright';
     //const KEY_NO  = isYesLeft ? 'arrowright' : 'arrowleft';
@@ -469,10 +471,6 @@ choices: [' '],
       end,
       save_data
     ];
-
-
-
-
 
     // ---- Build timeline ----
     // var timeline = [preload, welcome, example_trial, screen_before_main,
